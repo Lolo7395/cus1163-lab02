@@ -241,6 +241,9 @@ After completing the implementation:
 - What's the difference between fopen() and open()?
 - Why does the library method make different system calls?
 
+** The direct system call method (`open`, `read`, `close`) produces a minimal set of system calls: one `openat`, multiple `read` operations until end-of-file, and one `close`, in addition to the `write` calls for output. The library method (`fopen`, `fgets`, `fclose`) performs the same basic actions but introduces additional calls such as `fstat` and sometimes `mmap`/`munmap` to support buffered I/O. The key difference is that `open()` is a low-level system call that returns a file descriptor, whereas `fopen()` is a higher-level C library function that wraps `open()` and manages a `FILE*` stream with user-space buffering. Consequently, the library method makes different system calls and typically fewer `read()` calls, since it reads larger blocks of data at once and manages them internally. **
+
+
 **Commands for Analysis**
 
 ```
